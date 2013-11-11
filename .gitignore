@@ -2,11 +2,6 @@
 *.class
 *.jar
 
-# Eclipse files
-*.settings
-*.classpath
-*.project
-
 # Vim files
 *~
 *.swp
