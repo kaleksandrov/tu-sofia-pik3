@@ -8,7 +8,7 @@ Here you can find examples for the PIK3 course in Technicla University of Sofia.
 1. Select "File->Import->Existing Project into Workspace".
 1. Browse the downloaded repository folder.
 1. Select the project(s) you want to import.
-1. Click "Finish"
+1. Click "Finish".
 
 ## Available examples
 * ObjectOrientedProgrammingExample - This is an example usage of the basic Object Oriented Programming principles.
