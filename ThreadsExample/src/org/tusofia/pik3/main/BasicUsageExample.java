@@ -4,7 +4,7 @@ import org.tusofia.pik3.concurrent.MyRunnable;
 import org.tusofia.pik3.concurrent.MyThread;
 
 /**
- * The main program that shows how to work with threads.
+ * A program that shows a basic usage of threads in Java
  * 
  * @author kaleksandrov
  * 
