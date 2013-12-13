@@ -1,10 +1,10 @@
-package org.tusofia.pik3.main;
+package bg.tusofia.pik3.main;
 
-import org.tusofia.pik3.zoo.Animal;
-import org.tusofia.pik3.zoo.Barking;
-import org.tusofia.pik3.zoo.Cat;
-import org.tusofia.pik3.zoo.Dog;
-import org.tusofia.pik3.zoo.Mammal;
+import bg.tusofia.pik3.zoo.Animal;
+import bg.tusofia.pik3.zoo.Barking;
+import bg.tusofia.pik3.zoo.Cat;
+import bg.tusofia.pik3.zoo.Dog;
+import bg.tusofia.pik3.zoo.Mammal;
 
 /**
  * This is the main class that tests all the classes we have already written.

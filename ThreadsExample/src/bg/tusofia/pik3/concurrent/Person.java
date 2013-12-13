@@ -1,4 +1,4 @@
-package org.tusofia.pik3.concurrent;
+package bg.tusofia.pik3.concurrent;
 
 public class Person {
 	private final String name;

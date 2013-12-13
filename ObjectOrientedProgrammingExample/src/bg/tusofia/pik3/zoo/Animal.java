@@ -1,4 +1,4 @@
-package org.tusofia.pik3.zoo;
+package bg.tusofia.pik3.zoo;
 
 /**
  * This is an abstract class. Abstract classes cannot be instantiated, they can

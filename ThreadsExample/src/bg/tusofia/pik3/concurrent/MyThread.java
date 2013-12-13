@@ -1,4 +1,4 @@
-package org.tusofia.pik3.concurrent;
+package bg.tusofia.pik3.concurrent;
 
 /**
  * Custom thread implementation. This class extends the {@link Thread} class and

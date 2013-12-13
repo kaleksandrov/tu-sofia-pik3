@@ -1,7 +1,7 @@
-package org.tusofia.pik3.main;
+package bg.tusofia.pik3.main;
 
-import org.tusofia.pik3.concurrent.MyRunnable;
-import org.tusofia.pik3.concurrent.MyThread;
+import bg.tusofia.pik3.concurrent.MyRunnable;
+import bg.tusofia.pik3.concurrent.MyThread;
 
 /**
  * A program that shows a basic usage of threads in Java

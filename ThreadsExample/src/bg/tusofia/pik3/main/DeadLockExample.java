@@ -1,6 +1,6 @@
-package org.tusofia.pik3.main;
+package bg.tusofia.pik3.main;
 
-import org.tusofia.pik3.concurrent.Person;
+import bg.tusofia.pik3.concurrent.Person;
 
 /**
  * A program that shows an example of a dead lock.

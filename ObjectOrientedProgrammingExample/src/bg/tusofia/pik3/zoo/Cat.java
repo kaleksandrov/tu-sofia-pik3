@@ -1,4 +1,4 @@
-package org.tusofia.pik3.zoo;
+package bg.tusofia.pik3.zoo;
 
 /**
  * This class extends the Mammal class. It inherits all of its public/protected

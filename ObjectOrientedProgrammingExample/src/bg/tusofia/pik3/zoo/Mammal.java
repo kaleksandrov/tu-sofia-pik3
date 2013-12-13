@@ -1,4 +1,4 @@
-package org.tusofia.pik3.zoo;
+package bg.tusofia.pik3.zoo;
 
 /**
  * This class extends the Animal class so it inherits all of its public and

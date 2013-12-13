@@ -1,4 +1,4 @@
-package org.tusofia.pik3.main;
+package bg.tusofia.pik3.main;
 
 /**
  * A program that shows a basic usage of synchronisations
