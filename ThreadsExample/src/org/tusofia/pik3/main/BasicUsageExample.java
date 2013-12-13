@@ -9,7 +9,7 @@ import org.tusofia.pik3.concurrent.MyThread;
  * @author kaleksandrov
  * 
  */
-public class BasicUsageExample {
+public class BasicUsageExample extends Example {
 
 	/**
 	 * The entry point of the program
