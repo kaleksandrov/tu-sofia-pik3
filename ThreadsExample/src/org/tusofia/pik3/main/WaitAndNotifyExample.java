@@ -8,7 +8,7 @@ import java.util.Scanner;
  * @author kaleksandrov
  * 
  */
-public class WaitAndNotifyExample extends Example {
+public class WaitAndNotifyExample {
 
 	private static final String EXIT_KEYWORD = "exit";
 	private static final Object barrier = new Object();
