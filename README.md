@@ -14,4 +14,6 @@ Here you can find examples for the PIK3 course in Technicla University of Sofia.
 * ObjectOrientedProgrammingExample - This is an example usage of the basic Object Oriented Programming principles.
 * ThreadsExample - This is an example usage of threads in java.
 * SocketExample - This is an example of sockets basic usage.
+* ServerExample - A simple chat server example that uses sockets and manages multiple clients.
+* ClientExample - A simple client for the chat server described above.
 
