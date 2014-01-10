@@ -13,7 +13,7 @@ public class ClientImpl implements Client {
 	private String name;
 
 	private Socket socket;
-	private volatile AtomicBoolean isFinished;
+	private volatile AtomicBoolean isFinished = new AtomicBoolean();
 
 	public ClientImpl(final String host, final int port, final String name) {
 		this.host = host;
@@ -50,6 +50,7 @@ public class ClientImpl implements Client {
 						}
 						out.println(line);
 						out.flush();
+						disconnect();
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -76,8 +77,8 @@ public class ClientImpl implements Client {
 						System.out.println(line);
 						line = in.nextLine();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
+				} catch (Exception e) {
+//					e.printStackTrace();
 				} finally {
 					if (in != null) {
 						in.close();
@@ -94,7 +95,7 @@ public class ClientImpl implements Client {
 			socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
