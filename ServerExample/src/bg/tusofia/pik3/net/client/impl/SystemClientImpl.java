@@ -28,4 +28,9 @@ public class SystemClientImpl implements Client {
 	public String receive() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public void setOnDisconnectListener(OnDisconnectListener listener) {
+		throw new UnsupportedOperationException();
+	}
 }

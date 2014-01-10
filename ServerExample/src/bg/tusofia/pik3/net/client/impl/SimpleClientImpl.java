@@ -17,10 +17,11 @@ public class SimpleClientImpl implements Client {
 	private Socket socket;
 	private PrintWriter out;
 	private Scanner in;
+	private OnDisconnectListener onDisconnectListener;
 
 	public SimpleClientImpl(final Socket socket) {
 		this.socket = socket;
-		
+
 		try {
 			this.in = new Scanner(socket.getInputStream());
 			this.out = new PrintWriter(socket.getOutputStream());
@@ -40,6 +41,8 @@ public class SimpleClientImpl implements Client {
 				e.printStackTrace();
 			}
 		}
+
+		onDisconnectListener.onDisconnect();
 	}
 
 	@Override
@@ -49,18 +52,36 @@ public class SimpleClientImpl implements Client {
 
 	@Override
 	public synchronized void send(Client sender, String message) {
-		synchronized (out) {
-			out.format("[%s](%s) %s\n", now(), sender.getName(), message);
-			out.flush();
+		try {
+			synchronized (out) {
+				out.format("[%s](%s) %s\n", now(), sender.getName(), message);
+				out.flush();
+			}
+		} catch (Exception e) {
+			disconnect();
 		}
 	}
 
 	@Override
 	public String receive() {
-		return in.nextLine();
+		String line = "exit";
+		try {
+			synchronized (in) {
+				line = in.nextLine();
+			}
+		} catch (Exception e) {
+			
+		}
+
+		return line;
 	}
 
 	protected String now() {
 		return FORMATTER.format(new Date());
+	}
+
+	@Override
+	public void setOnDisconnectListener(final OnDisconnectListener listener) {
+		this.onDisconnectListener = listener;
 	}
 }

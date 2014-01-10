@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientImpl implements Client {
 
@@ -12,7 +13,7 @@ public class ClientImpl implements Client {
 	private String name;
 
 	private Socket socket;
-	private volatile boolean isFinished;
+	private volatile AtomicBoolean isFinished;
 
 	public ClientImpl(final String host, final int port, final String name) {
 		this.host = host;
@@ -40,8 +41,13 @@ public class ClientImpl implements Client {
 					out.println(name);
 					out.flush();
 
-					while (sysIn.hasNext() && !isFinished) {
+					while (sysIn.hasNext() && !isFinished.get()) {
 						String line = sysIn.nextLine();
+						if ("exit".equals(line)) {
+							synchronized (isFinished) {
+								isFinished.set(true);
+							}
+						}
 						out.println(line);
 						out.flush();
 					}
@@ -66,12 +72,10 @@ public class ClientImpl implements Client {
 				try {
 					in = new Scanner(socket.getInputStream());
 					String line = in.nextLine();
-					while (!"exit".equals(line) && !isFinished) {
+					while (!isFinished.get()) {
 						System.out.println(line);
 						line = in.nextLine();
 					}
-
-					isFinished = true;
 				} catch (IOException e) {
 					e.printStackTrace();
 				} finally {

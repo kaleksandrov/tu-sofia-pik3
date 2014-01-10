@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bg.tusofia.pik3.net.client.Client;
+import bg.tusofia.pik3.net.client.Client.OnDisconnectListener;
 import bg.tusofia.pik3.net.client.impl.SimpleClientImpl;
 import bg.tusofia.pik3.net.client.impl.SystemClientImpl;
 import bg.tusofia.pik3.net.server.Server;
@@ -45,6 +46,14 @@ public class ServerImpl implements Server {
 				final Socket socket = serverSocket.accept();
 
 				final Client client = new SimpleClientImpl(socket);
+				client.setOnDisconnectListener(new OnDisconnectListener() {
+
+					@Override
+					public void onDisconnect() {
+						clients.remove(client);
+						System.out.println("REMOVED! " + client.getName());
+					}
+				});
 				clients.add(client);
 
 				final Thread clientThread = new Thread() {
@@ -53,12 +62,7 @@ public class ServerImpl implements Server {
 						printHeader(client);
 						broadcast(systemClient,
 								String.format("%s has just connected!\n", client.getName()));
-
-						String line = client.receive();
-						while (true) {
-							broadcast(client, line);
-							line = client.receive();
-						}
+						menuLoop(client);
 					};
 				};
 				clientThread.start();
@@ -101,9 +105,41 @@ public class ServerImpl implements Server {
 
 	private void printHeader(final Client client) {
 		client.send(systemClient, "=======================================");
-		client.send(systemClient, "============== Greetings! =============");
+		client.send(systemClient, "Greetings!");
 		client.send(systemClient, "=======================================");
 		client.send(systemClient, "");
 		client.send(systemClient, String.format("===  Welcome, %s!", client.getName()));
+	}
+
+	private void menuLoop(final Client client) {
+		boolean online = true;
+		while (online) {
+			String line = client.receive();
+
+			switch (line) {
+
+			case "exit": {
+				client.send(systemClient, "=======================================");
+				client.send(systemClient, "Bye!");
+				client.send(systemClient, "=======================================");
+				client.disconnect();
+				online = false;
+				break;
+			}
+
+			case "list": {
+				client.send(systemClient, "=======================================");
+				client.send(systemClient, "Online:");
+				for (Client c : clients) {
+					client.send(systemClient, "------> " + c.getName());
+				}
+				client.send(systemClient, "=======================================");
+			}
+
+			default:
+				broadcast(client, line);
+				break;
+			}
+		}
 	}
 }
