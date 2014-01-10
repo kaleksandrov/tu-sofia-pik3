@@ -1,21 +1,28 @@
-package bg.tusofia.pik3.net.server;
+package bg.tusofia.pik3.net.server.impl;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import bg.tusofia.pik3.net.client.Client;
-import bg.tusofia.pik3.net.client.ClientImpl;
+import bg.tusofia.pik3.net.client.impl.SimpleClientImpl;
+import bg.tusofia.pik3.net.client.impl.SystemClientImpl;
+import bg.tusofia.pik3.net.server.Server;
 
+/**
+ * A simple implementation fo the {@link Server} interface.
+ * 
+ * @author kaleksandrov
+ * 
+ */
 public class ServerImpl implements Server {
 
 	private int port;
 	private ServerSocket serverSocket;
-
 	private List<Client> clients;
+	private Client systemClient = new SystemClientImpl();
 
 	public ServerImpl(final int port) {
 		this.port = port;
@@ -34,26 +41,27 @@ public class ServerImpl implements Server {
 			System.out.format("[Server] Start listening on port %d...\n", port);
 
 			while (true) {
+				// Wait for incoming connections
 				final Socket socket = serverSocket.accept();
-				final Client client = new ClientImpl("test", socket);
+
+				final Client client = new SimpleClientImpl(socket);
 				clients.add(client);
 
-				Thread t = new Thread() {
+				final Thread clientThread = new Thread() {
 					@Override
 					public void run() {
-						System.out.println("[Server] Someone has just connected!");
-						client.send(client.getName(), "Welcome!");
+						printHeader(client);
+						broadcast(systemClient,
+								String.format("%s has just connected!\n", client.getName()));
 
-						Scanner in = client.getIn();
-						String line = in.nextLine();
+						String line = client.receive();
 						while (true) {
-							System.out.println("Read line : " + line);
 							broadcast(client, line);
-							line = in.nextLine();
+							line = client.receive();
 						}
 					};
 				};
-				t.start();
+				clientThread.start();
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -78,7 +86,6 @@ public class ServerImpl implements Server {
 			}
 			serverSocket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -86,7 +93,17 @@ public class ServerImpl implements Server {
 	@Override
 	public void broadcast(final Client sender, final String message) {
 		for (Client client : clients) {
-			client.send(sender.getName(), message);
+			if (client != sender) {
+				client.send(sender, message);
+			}
 		}
+	}
+
+	private void printHeader(final Client client) {
+		client.send(systemClient, "=======================================");
+		client.send(systemClient, "============== Greetings! =============");
+		client.send(systemClient, "=======================================");
+		client.send(systemClient, "");
+		client.send(systemClient, String.format("===  Welcome, %s!", client.getName()));
 	}
 }

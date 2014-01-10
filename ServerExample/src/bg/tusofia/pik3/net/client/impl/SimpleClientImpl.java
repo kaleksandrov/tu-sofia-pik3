@@ -1,4 +1,4 @@
-package bg.tusofia.pik3.net.client;
+package bg.tusofia.pik3.net.client.impl;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public class ClientImpl implements Client {
+import bg.tusofia.pik3.net.client.Client;
+
+public class SimpleClientImpl implements Client {
 
 	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -16,16 +18,17 @@ public class ClientImpl implements Client {
 	private PrintWriter out;
 	private Scanner in;
 
-	public ClientImpl(final String name, final Socket socket) {
-		this.name = name;
+	public SimpleClientImpl(final Socket socket) {
 		this.socket = socket;
-
+		
 		try {
 			this.in = new Scanner(socket.getInputStream());
 			this.out = new PrintWriter(socket.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		this.name = in.nextLine();
 	}
 
 	@Override
@@ -45,24 +48,19 @@ public class ClientImpl implements Client {
 	}
 
 	@Override
-	public PrintWriter getOut() {
-		return out;
-	}
-
-	@Override
-	public Scanner getIn() {
-		return in;
-	}
-
-	@Override
-	public synchronized void send(String sender, String message) {
+	public synchronized void send(Client sender, String message) {
 		synchronized (out) {
-			out.format("[%s](%s) %s\n", now(), sender, message);
+			out.format("[%s](%s) %s\n", now(), sender.getName(), message);
 			out.flush();
 		}
 	}
 
-	private String now() {
+	@Override
+	public String receive() {
+		return in.nextLine();
+	}
+
+	protected String now() {
 		return FORMATTER.format(new Date());
 	}
 }

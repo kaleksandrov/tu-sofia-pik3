@@ -25,12 +25,11 @@ public class ClientImpl implements Client {
 		try {
 			socket = new Socket(host, port);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.format("[Client] Connected to server %s:%d!\n", host, port);
 
-		Thread t2 = new Thread() {
+		final Thread outThread = new Thread() {
 			@Override
 			public void run() {
 				System.out.println("Started...");
@@ -38,10 +37,11 @@ public class ClientImpl implements Client {
 				Scanner sysIn = new Scanner(System.in);
 				try {
 					out = new PrintWriter(socket.getOutputStream());
+					out.println(name);
+					out.flush();
+
 					while (sysIn.hasNext() && !isFinished) {
 						String line = sysIn.nextLine();
-						System.out.println("Read line : " + line);
-
 						out.println(line);
 						out.flush();
 					}
@@ -55,9 +55,9 @@ public class ClientImpl implements Client {
 				}
 			};
 		};
-		t2.start();
+		outThread.start();
 
-		Thread t1 = new Thread() {
+		final Thread inThread = new Thread() {
 			@Override
 			public void run() {
 				// Use a Scanner to read from the remote server
@@ -81,24 +81,26 @@ public class ClientImpl implements Client {
 				}
 			};
 		};
-		t1.start();
+		inThread.start();
 	}
 
 	@Override
 	public void disconnect() {
-		// TODO Auto-generated method stub
-
+		try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public boolean isConnected() {
-		// TODO Auto-generated method stub
-		return false;
+		return socket.isConnected() && !socket.isClosed();
 	}
 
 	@Override
 	public void send(String message) {
-		// TODO Auto-generated method stub
 
 	}
 
